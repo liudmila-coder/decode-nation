@@ -904,3 +904,40 @@ a:focus,
     padding:10px 16px!important;
   }
 }
+
+
+/* 2026-10-12 revisions from Правки.docx */
+.hero__secondary-line{font-weight:400!important;}
+.site-header{align-items:center!important;}
+.site-nav{align-items:center!important;align-self:center!important;}
+#why .card__label{font-size:clamp(17px,1.55vw,20px);letter-spacing:.1em;}
+.why-icon-row{display:flex;align-items:center;justify-content:center;gap:16px;margin:-6px auto 22px;}
+.why-icon-row span{display:block;width:clamp(54px,7vw,92px);height:1px;background:rgba(153,25,48,.72);}
+.why-icon-row img{width:clamp(72px,7.5vw,94px);height:auto;mix-blend-mode:multiply;}
+.station__subhead{font-size:calc(var(--fs-headline)*.5)!important;}
+.info-column__title,#brands .card__headline,#next .card__headline,#contact .card__headline,.founder__name{
+  font-family:var(--serif)!important;
+  font-size:calc(var(--fs-headline)*.5)!important;
+  line-height:1.35!important;
+  font-weight:600!important;
+  color:var(--ink)!important;
+  letter-spacing:0!important;
+}
+#next .card{text-align:center;}
+#next .card__label,#next .card__headline,#next .flow,#next .measure,#next p.divided{margin-left:auto;margin-right:auto;}
+#next .flow{align-items:center;}
+#next .next__walking-icon{display:block;width:clamp(54px,5.5vw,72px);height:auto;margin:-8px auto 22px;mix-blend-mode:multiply;}
+#next p.divided{text-align:center;}
+.contact__label-row{display:flex;align-items:center;gap:14px;margin-bottom:28px;}
+.contact__label-row .card__label{margin-bottom:0;}
+.contact__woman-icon{width:clamp(34px,3.8vw,50px);height:auto;mix-blend-mode:multiply;}
+.founder__name{margin-top:0;}
+@media(max-width:767.98px){
+  #why .card__label{font-size:16px;}
+  .station__subhead,.info-column__title,#brands .card__headline,#next .card__headline,#contact .card__headline,.founder__name{font-size:18px!important;}
+  .why-icon-row{gap:10px;margin-bottom:18px;}
+  .why-icon-row span{width:42px;}
+  .why-icon-row img{width:68px;}
+  #next .next__walking-icon{width:56px;}
+  .contact__woman-icon{width:34px;}
+}
