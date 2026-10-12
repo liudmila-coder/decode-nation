@@ -1,0 +1,549 @@
+/* ==========================================================================
+   Decode Nation — Manifesto (v9)
+   Calm "culture fundamental" pass: one fixed public-space photo, six
+   translucent cards with the double sketch frame, two fonts, seven type
+   styles, burgundy used as an accent only.
+   ========================================================================== */
+
+:root {
+  /* colour */
+  --burgundy: #991930;
+  --ink: #1A1A1A;
+  --secondary: #555555;
+  --white: #FFFFFF;
+  --page: #F3F3F1;
+  --backdrop: #E9E9E7;
+  --backdrop-veil: rgba(243, 243, 241, .2);
+  --card-bg: rgba(255, 255, 255, .86);
+  --hairline: #E5E5E5;
+  --portrait-bg: #E6E6E4;
+
+  /* fonts — exactly two */
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  /* the seven type styles (desktop values; mobile overrides below) */
+  --fs-display: 64px;
+  --fs-headline: 40px;
+  --fs-statement: 28px;
+  --fs-label: 15px;
+  --fs-body: 18px;
+  --fs-small: 14px;
+  --fs-button: 14px;
+
+  /* layout */
+  --gutter: clamp(16px, 5vw, 64px);
+  --wrap: 1200px;
+  --measure: 640px;
+  --card-pad: clamp(28px, 5.6vw, 80px);
+  --card-gap: clamp(28px, 4.2vw, 60px);   /* per side → 56–120px between cards */
+  --stack: 24px;
+  --block: clamp(40px, 5vw, 64px);
+
+  /* motion */
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+}
+
+@media (max-width: 767.98px) {
+  :root {
+    --fs-display: 40px;
+    --fs-headline: 30px;
+    --fs-statement: 24px;
+    --fs-body: 17px;
+  }
+}
+
+/* ------------------------------------------------------------------ base */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  font-synthesis: none;
+}
+
+a { color: var(--burgundy); text-decoration: none; }
+a:hover { color: var(--ink); }
+
+::selection { background: var(--burgundy); color: var(--white); }
+
+input, textarea, button { font: inherit; color: inherit; }
+img { display: block; max-width: 100%; }
+p, h1, h2, h3 { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+:focus { outline: none; }
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--burgundy);
+  outline-offset: 3px;
+}
+main:focus { outline: none; }
+
+/* -------------------------------------------------------- the type scale */
+/* Seven styles. Nothing else on the page sets a size, weight or tracking. */
+
+.t-display,
+.t-headline,
+.t-statement {
+  font-family: var(--serif);
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+.t-display   { font-size: var(--fs-display);   line-height: 1.1; }
+.t-headline  { font-size: var(--fs-headline);  line-height: 1.2; }
+.t-statement { font-size: var(--fs-statement); line-height: 1.3; }
+
+.t-label {
+  font-family: var(--sans);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+}
+
+.t-body {
+  font-family: var(--sans);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.t-small {
+  font-family: var(--sans);
+  font-size: var(--fs-small);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--secondary);
+}
+
+.t-button,
+.btn,
+.logo,
+.site-nav__link,
+.skip-link {
+  font-family: var(--sans);
+  font-size: var(--fs-button);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------- marker (women / women’s) */
+/* A thin hand-drawn burgundy stroke just under the baseline, about as thick
+   as the card frame (≈2.5px): it rises slightly to the right and its
+   thickness wavers a little. Only on women / women’s in display and
+   headlines. The shape is a filled SVG so the unevenness survives scaling. */
+
+.mark {
+  position: relative;
+  z-index: 0;
+  white-space: nowrap;
+}
+.mark::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: -.05em;
+  right: -.05em;
+  bottom: .02em;
+  height: 9px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 14' preserveAspectRatio='none'%3E%3Cpath fill='%23991930' d='M3 7.4C25 8 40 8.7 60 8.7S115 7.2 150 6.7S205 5 230 4.6S285 2.6 296 2C299 2.3 299.5 4.8 297 5.2C285 5.8 255 8 230 8.6S180 9.6 150 10.1S95 12.6 60 12.5S15 11.9 4 11.6C1 11.2 1 7.8 3 7.4Z'/%3E%3C/svg%3E") no-repeat 0 0 / 100% 100%;
+}
+.mark--draw::after {
+  transform-origin: left center;
+  animation: markDraw 1s .8s var(--ease-out) both;
+}
+@keyframes markDraw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* --------------------------------------------------------------- buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 26px;
+  border: 1.5px solid var(--burgundy);
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn--solid { background: var(--burgundy); color: var(--white); }
+.btn--solid:hover { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.btn--outline { background: transparent; color: var(--burgundy); }
+.btn--outline:hover { background: var(--burgundy); color: var(--white); }
+
+@media (max-width: 419.98px) {
+  .btn { white-space: normal; }
+}
+
+.text-link {
+  color: var(--burgundy);
+  white-space: nowrap;
+}
+.text-link:hover { color: var(--ink); }
+
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1000;
+  padding: 12px 18px;
+  background: var(--ink);
+  color: var(--white);
+  transform: translateY(-160%);
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: none;
+  color: var(--white);
+  outline: 2px solid var(--burgundy);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------ page + backdrop */
+
+.page {
+  position: relative;
+  overflow-x: hidden;
+  overflow-x: clip;     /* rotated card frames */
+}
+
+/* Fixed full-viewport photo (a fixed element — iOS ignores
+   background-attachment: fixed). */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: var(--backdrop);
+  pointer-events: none;
+}
+.backdrop__img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+.backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--backdrop-veil);
+}
+
+.page__inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------------- header */
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px var(--gutter);
+}
+.logo {
+  line-height: 1.2;
+  color: var(--ink);
+}
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 3vw, 40px);
+}
+.site-nav__link { color: var(--ink); }
+.site-nav__link:hover { color: var(--burgundy); }
+.site-nav__cta { padding: 10px 18px; }
+
+/* No mobile menu was designed: on narrow screens keep wordmark + Contact. */
+@media (max-width: 639.98px) {
+  .site-nav__link { display: none; }
+}
+
+/* ------------------------------------------------------------------ hero */
+
+.hero {
+  max-width: calc(var(--wrap) + 2 * var(--gutter));
+  padding: clamp(56px, 12vh, 140px) var(--gutter) clamp(72px, 14vh, 160px);
+}
+.hero__label { margin-bottom: 28px; animation: fadeUp 1s both; }
+.hero__title { max-width: 19ch; animation: fadeUp 1.2s .15s both; }
+.hero__cta { margin-top: 44px; animation: fadeUp 1.2s .5s both; }
+
+/* ----------------------------------------------------------------- cards */
+
+.section { padding: var(--card-gap) var(--gutter); }
+.section--contact { padding-bottom: 32px; }
+.wrap { max-width: var(--wrap); }
+
+/* Translucent card with the double "sketch" frame: two burgundy borders
+   (2.5px + 1.5px) hugging the edge, each rotated a fraction of a degree in
+   opposite directions so the lines cross and drift apart. Approved — keep. */
+.card {
+  --tilt-a: -.35deg;
+  --tilt-b: .25deg;
+  position: relative;
+  padding: var(--card-pad);
+  background: var(--card-bg);
+}
+.card::before,
+.card::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  border-style: solid;
+  border-color: var(--burgundy);
+}
+.card::before { inset: -3px; border-width: 2.5px; transform: rotate(var(--tilt-a)); }
+.card::after  { inset: -1px; border-width: 1.5px; transform: rotate(var(--tilt-b)); }
+#stations .card { --tilt-a: .3deg;   --tilt-b: -.2deg; }
+#brands .card   { --tilt-a: -.25deg; --tilt-b: .35deg; }
+#next .card     { --tilt-a: .3deg;   --tilt-b: -.25deg; }
+#about .card    { --tilt-a: -.3deg;  --tilt-b: .2deg; }
+#contact .card  { --tilt-a: -.2deg;  --tilt-b: .2deg; }
+
+.card__label { margin-bottom: 28px; }
+.card__headline { max-width: 24ch; margin-bottom: 36px; }
+/* contact question: full card width so it breaks into 2–3 even lines */
+.card__headline--wide { max-width: 36ch; }
+.card__cta { align-self: flex-start; margin-top: 12px; }
+
+/* vertical rhythm */
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack);
+  min-width: 0;
+}
+.measure { max-width: var(--measure); }
+.flow > .t-statement { margin-top: 8px; }
+
+/* two columns that stack below 900px */
+.split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+  gap: var(--stack) clamp(40px, 5vw, 72px);
+  align-items: start;
+}
+.split > * { min-width: 0; }
+.split > .t-body,
+.split > .flow { max-width: var(--measure); }
+.split--media { margin-top: 8px; }
+
+/* a thin grey rule separates a sub-block, as in the reference */
+.divided {
+  margin-top: 48px;
+  padding-top: 40px;
+  border-top: 1px solid var(--hairline);
+}
+.divided > .t-statement { margin-bottom: var(--stack); }
+p.divided { padding-top: 28px; margin-top: 36px; }
+
+/* plain bulleted list, spacing instead of rules */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 1.1em;
+  list-style: disc;
+}
+.list li { padding-left: .3em; }
+.list li::marker { color: var(--secondary); }
+
+/* --------------------------------------------------------------- stations */
+
+.station-frame {
+  align-self: start;
+  max-width: 520px;
+  background: var(--white);
+  border: 1.5px solid var(--burgundy);
+}
+.station-frame img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 716 / 791;
+  object-fit: cover;
+}
+
+/* ------------------------------------------------------------------ about */
+
+.founders {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: var(--block) clamp(40px, 5vw, 72px);
+  margin-top: var(--block);
+}
+.founder {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.portrait {
+  aspect-ratio: 1 / 1;
+  margin-bottom: 28px;
+  background: var(--portrait-bg);
+  border: 1.5px solid var(--burgundy);
+  overflow: hidden;
+}
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.founder__role { margin: 4px 0 20px; }
+
+/* ---------------------------------------------------------------- contact */
+
+.contact__links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-top: 8px;
+}
+.contact__link { color: var(--ink); overflow-wrap: anywhere; }
+.contact__link:hover { color: var(--burgundy); }
+
+.contact-form {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.field__input {
+  width: 100%;
+  padding: 10px 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  border-radius: 0;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field__input--area { resize: vertical; }
+.field__input:focus { border-bottom-color: var(--burgundy); }
+.field__input:focus-visible {
+  border-bottom-color: var(--burgundy);
+  box-shadow: 0 1px 0 0 var(--burgundy);
+}
+.field__input[aria-invalid="true"] { border-bottom-color: var(--burgundy); }
+.field__error { color: var(--burgundy); }
+.field__error:empty { display: none; }
+
+.intent { margin: 0; padding: 0; border: 0; min-width: 0; }
+.intent__legend { display: block; padding: 0; margin-bottom: 10px; }
+.intent__options { display: flex; flex-wrap: wrap; gap: 8px; }
+.intent__opt { position: relative; display: inline-flex; }
+.intent__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.intent__btn {
+  padding: 10px 18px;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  cursor: pointer;
+}
+.intent__input:checked + .intent__btn {
+  background: var(--burgundy);
+  border-color: var(--burgundy);
+  color: var(--white);
+}
+.intent__input:focus-visible + .intent__btn {
+  outline: 2px solid var(--burgundy);
+  outline-offset: 3px;
+}
+
+.btn--submit { align-self: flex-start; }
+.btn--submit:disabled { cursor: default; }
+.btn--submit:disabled:hover { background: transparent; color: var(--burgundy); }
+.btn--submit[aria-busy="true"] { opacity: .75; }
+
+.form-status:empty { display: none; }
+.form-status.is-error { color: var(--burgundy); }
+
+.hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.site-foot {
+  color: var(--ink);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 48px;
+  padding: 0 4px;
+}
+
+/* --------------------------------------------------------- scroll reveal */
+/* Only when JS is running (html.js) — without JS everything is visible. */
+
+html.js [data-reveal] {
+  transition: opacity .9s var(--ease-out), transform .9s var(--ease-out);
+}
+html.js [data-reveal]:not(.is-shown) {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+/* -------------------------------------------------------- reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero__label,
+  .hero__title,
+  .hero__cta,
+  .mark--draw::after { animation: none; }
+  html.js [data-reveal],
+  html.js [data-reveal]:not(.is-shown) {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
