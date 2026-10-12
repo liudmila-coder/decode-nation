@@ -772,3 +772,51 @@ a:focus,
     font-size: 18px;
   }
 }
+
+
+/* FINAL HEADER/HERO OVERRIDE */
+.site-header{
+  padding-left:0!important;
+}
+.logo{
+  display:block!important;
+  width:clamp(360px,38vw,580px)!important;
+  height:auto!important;
+  overflow:visible!important;
+  margin-left:0!important;
+  background:transparent!important;
+  flex:0 0 auto!important;
+}
+.logo__img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-width:none!important;
+  transform:none!important;
+  mix-blend-mode:normal!important;
+  object-fit:contain!important;
+  background:transparent!important;
+}
+.hero__title{
+  max-width:none!important;
+}
+.hero__line1,
+.hero__line2{
+  white-space:nowrap;
+}
+.hero__secondary-line{
+  display:inline-block;
+  font-family:var(--serif);
+  font-weight:400!important;
+  font-size:.62em;
+  line-height:1.25;
+}
+@media (max-width:899.98px){
+  .logo{width:min(52vw,360px)!important;}
+  .hero__line1,
+  .hero__line2{white-space:normal;}
+}
+@media (max-width:639.98px){
+  .site-header{padding-left:0!important;}
+  .logo{width:min(48vw,340px)!important;}
+}
