@@ -744,3 +744,31 @@ a:focus,
     height: 40px;
   }
 }
+
+
+/* 2026-10-11 hero option #1 + proposed inventory typography */
+.hero__title {
+  max-width: 24ch;
+}
+.hero__secondary-line {
+  display: inline-block;
+  font-size: .62em;
+  line-height: 1.25;
+  font-weight: 600;
+}
+.station__inventory-title {
+  font-family: var(--serif);
+  font-size: calc(var(--fs-headline) * .5);
+  line-height: 1.35;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0;
+}
+@media (max-width: 767.98px) {
+  .hero__secondary-line {
+    font-size: .68em;
+  }
+  .station__inventory-title {
+    font-size: 18px;
+  }
+}
