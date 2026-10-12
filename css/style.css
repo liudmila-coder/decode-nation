@@ -608,5 +608,139 @@ a:focus,
 }
 
 @media (max-width: 639.98px) {
-  .logo__img { width: 132px; }
+  /* logo sizing is defined in the refinement pass below */
+}
+
+
+/* 2026-10-11 visual refinement pass */
+.logo {
+  width: clamp(174px, 19vw, 260px);
+  height: clamp(91px, 10vw, 136px);
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+.logo__img {
+  width: clamp(284px, 31vw, 425px);
+  max-width: none;
+  height: auto;
+  transform: translate(clamp(-108px, -7.9vw, -72px), clamp(-50px, -3.65vw, -33px));
+  mix-blend-mode: screen;
+}
+
+/* A calmer, more readable hero scale with deliberate desktop line breaks. */
+.hero__title {
+  font-size: clamp(36px, 4.3vw, 54px);
+  line-height: 1.08;
+  max-width: 25ch;
+}
+.hero-break { display: inline; }
+
+/* Section hierarchy: one red uppercase label, one serif subheading, body text. */
+.feature-label {
+  font-size: clamp(17px, 1.55vw, 20px);
+  letter-spacing: .1em;
+}
+.station__subhead {
+  font-size: calc(var(--fs-headline) * .5);
+  line-height: 1.35;
+  max-width: 34ch;
+  margin-bottom: 36px;
+}
+
+/* Essential Station location/benefit matrix. */
+.station-benefits {
+  margin-top: 56px;
+  padding-top: 48px;
+}
+.location-grid {
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1.25fr);
+  gap: clamp(36px, 5vw, 72px);
+  align-items: start;
+}
+.info-column + .info-column {
+  border-left: 1px solid rgba(153, 25, 48, .72);
+  padding-left: clamp(30px, 4vw, 56px);
+}
+.info-column__title {
+  font-size: clamp(24px, 2.35vw, 32px);
+  margin-bottom: 30px;
+}
+.icon-list,
+.expect-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.icon-list__item,
+.expect-list__item {
+  display: grid;
+  align-items: center;
+  min-width: 0;
+}
+.icon-list__item {
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 18px;
+}
+.expect-list__item {
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 20px;
+}
+.line-icon {
+  width: 48px;
+  height: 48px;
+  fill: none;
+  stroke: var(--burgundy);
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.expect-list__item .t-body,
+.icon-list__item .t-body {
+  margin: 0;
+}
+.expect-list__item strong {
+  font-weight: 500;
+}
+
+@media (max-width: 899.98px) {
+  .location-grid { grid-template-columns: 1fr; }
+  .info-column + .info-column {
+    border-left: 0;
+    border-top: 1px solid rgba(153, 25, 48, .5);
+    padding-left: 0;
+    padding-top: 34px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .hero__title {
+    font-size: 36px;
+    line-height: 1.1;
+    max-width: 20ch;
+  }
+  .hero-break { display: none; }
+  .feature-label { font-size: 16px; }
+  .station__subhead { font-size: 18px; }
+  .info-column__title { font-size: 24px; }
+}
+
+@media (max-width: 639.98px) {
+  .logo {
+    width: 158px;
+    height: 82px;
+  }
+  .logo__img {
+    width: 258px;
+    transform: translate(-66px, -30px);
+  }
+  .icon-list__item,
+  .expect-list__item {
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 14px;
+  }
+  .line-icon {
+    width: 40px;
+    height: 40px;
+  }
 }
