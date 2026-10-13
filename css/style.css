@@ -941,3 +941,52 @@ a:focus,
   #next .next__walking-icon{width:56px;}
   .contact__woman-icon{width:34px;}
 }
+
+
+/* 2026-10-13 typography + contact link refinements */
+.hero__secondary-line{
+  font-family:var(--serif)!important;
+  font-weight:400!important;
+}
+
+#about .card__headline,
+#next .card__headline,
+#next .flow > .t-statement{
+  font-family:var(--serif)!important;
+  font-size:calc(var(--fs-headline)*.5)!important;
+  line-height:1.35!important;
+  font-weight:600!important;
+  color:var(--ink)!important;
+  letter-spacing:0!important;
+}
+
+#next .card__headline{
+  max-width:none!important;
+  white-space:nowrap!important;
+}
+
+#next .flow > .t-statement{
+  margin-top:8px!important;
+}
+
+.contact__woman-icon{
+  width:clamp(54px,5vw,72px)!important;
+  height:auto!important;
+  object-fit:contain!important;
+  background:transparent!important;
+  mix-blend-mode:normal!important;
+}
+
+@media(max-width:767.98px){
+  #about .card__headline,
+  #next .card__headline,
+  #next .flow > .t-statement{
+    font-size:18px!important;
+  }
+  #next .card__headline{
+    white-space:normal!important;
+  }
+  .contact__woman-icon{
+    width:48px!important;
+  }
+}
