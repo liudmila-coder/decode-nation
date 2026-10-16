@@ -1,77 +1,75 @@
-name: Build production PNG icons
+name: Install production woman icons
 
 on:
   push:
     branches: [main]
     paths:
       - ".github/workflows/build-production-icons.yml"
-      - "assets/icon-walking-woman-hq.webp"
-      - "assets/icon-phone-woman-hq.webp"
+      - ".tmp/walking.b64"
+      - ".tmp/phone.001.b64"
+      - ".tmp/phone.002.b64"
 
 permissions:
   contents: write
 
 jobs:
-  build-icons:
+  install-icons:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Create production PNGs
+      - name: Restore exact production assets
+        run: |
+          tr -d '\n\r ' < .tmp/walking.b64 | base64 --decode > assets/icon-walking-woman-production.webp
+          cat .tmp/phone.001.b64 .tmp/phone.002.b64 | tr -d '\n\r ' | base64 --decode > assets/icon-phone-woman-production.webp
+          echo "walking sha1: $(sha1sum assets/icon-walking-woman-production.webp)"
+          echo "phone sha1: $(sha1sum assets/icon-phone-woman-production.webp)"
+          test "$(sha1sum assets/icon-walking-woman-production.webp | cut -d' ' -f1)" = "4ec9fbdbaccaad795d6bb5a001f51fb6202dd2eb"
+          test "$(sha1sum assets/icon-phone-woman-production.webp | cut -d' ' -f1)" = "3a66bdd9bc9d2828fba8bf80dc8ce929f8270270"
+
+      - name: Verify dimensions and alpha
         run: |
           python3 -m pip install --quiet pillow
           python3 - <<'PY'
           from PIL import Image
-
-          specs = [
-              ("assets/icon-walking-woman-hq.webp", "assets/icon-walking-woman-production.png", 576),
-              ("assets/icon-phone-woman-hq.webp", "assets/icon-phone-woman-production.png", 288),
+          checks = [
+              ("assets/icon-walking-woman-production.webp", (168,168)),
+              ("assets/icon-phone-woman-production.webp", (144,432)),
           ]
-
-          for src, dst, target_w in specs:
-              im = Image.open(src).convert("RGBA")
-              target_h = round(im.height * target_w / im.width)
-              out = im.resize((target_w, target_h), Image.Resampling.LANCZOS)
-              out.save(dst, "PNG", optimize=True)
-              check = Image.open(dst)
-              assert check.mode == "RGBA"
-              assert check.size == (target_w, target_h)
-              print(src, "->", dst, check.size, check.mode)
+          for path, expected in checks:
+              im = Image.open(path)
+              assert im.size == expected, (path, im.size)
+              assert "A" in im.getbands(), (path, im.mode)
+              print(path, im.size, im.mode)
           PY
 
-      - name: Update image paths only
+      - name: Update only image sources
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          p = Path("index.html")
-          s = p.read_text(encoding="utf-8")
-
-          old_walk = '<img class="next__walking-icon" src="/assets/icon-walking-woman-hq.webp" width="288" height="419" alt="" aria-hidden="true">'
-          new_walk = '<img class="next__walking-icon" src="/assets/icon-walking-woman-production.png?v=20261016-1" width="576" height="838" alt="" aria-hidden="true">'
-
-          old_phone = '<img class="contact__woman-icon" src="/assets/icon-phone-woman-hq.webp" width="200" height="545" alt="" aria-hidden="true">'
-          new_phone = '<img class="contact__woman-icon" src="/assets/icon-phone-woman-production.png?v=20261016-1" width="288" height="785" alt="" aria-hidden="true">'
-
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+          old_walk='/assets/icon-walking-woman-hq.webp'
+          old_phone='/assets/icon-phone-woman-hq.webp'
           if old_walk not in s:
-              raise SystemExit("Walking woman tag not found")
+              old_walk='/assets/icon-walking-woman-production.webp?v=20261016-1'
           if old_phone not in s:
-              raise SystemExit("Phone woman tag not found")
-
-          s = s.replace(old_walk, new_walk, 1)
-          s = s.replace(old_phone, new_phone, 1)
-          p.write_text(s, encoding="utf-8")
+              old_phone='/assets/icon-phone-woman-production.webp?v=20261016-1'
+          s=s.replace(old_walk,'/assets/icon-walking-woman-production.webp?v=20261016-2',1)
+          s=s.replace(old_phone,'/assets/icon-phone-woman-production.webp?v=20261016-2',1)
+          p.write_text(s,encoding="utf-8")
           PY
 
-      - name: Commit generated assets
+      - name: Commit assets and HTML
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/icon-walking-woman-production.png assets/icon-phone-woman-production.png index.html
+          git add assets/icon-walking-woman-production.webp assets/icon-phone-woman-production.webp index.html
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Add production PNGs for What Comes Next and Contact"
+            git commit -m "Use production woman icons in Next and Contact"
             git push origin main
           fi
