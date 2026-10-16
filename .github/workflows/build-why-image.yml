@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/build-why-image.yml"
-      - "assets/icon-women-trio-hq.webp"
+      - "assets/icon-women-trio-source.webp"
 
 permissions:
   contents: write
@@ -23,7 +23,7 @@ jobs:
           python3 -m pip install --quiet pillow
           python3 - <<'PY'
           from PIL import Image
-          src = "assets/icon-women-trio-hq.webp"
+          src = "assets/icon-women-trio-source.webp"
           dst = "assets/icon-women-trio-production-960x720.png"
           im = Image.open(src).convert("RGBA")
           im = im.resize((960, 720), Image.Resampling.LANCZOS)
@@ -59,4 +59,3 @@ jobs:
             git push origin main
           fi
 
-# trigger 2026-10-16
