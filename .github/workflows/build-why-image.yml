@@ -1,61 +1,45 @@
-name: Build WHY WE EXIST PNG
-
+name: Install WHY WE EXIST PNG
 on:
   push:
     branches: [main]
     paths:
       - ".github/workflows/build-why-image.yml"
-      - "assets/icon-women-trio-source.webp"
-
+      - ".tmp/trio-b64/**"
 permissions:
   contents: write
-
 jobs:
-  build-image:
+  install-image:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Create production PNG
+      - name: Decode and verify exact PNG
         run: |
-          python3 -m pip install --quiet pillow
-          python3 - <<'PY'
-          from PIL import Image
-          src = "assets/icon-women-trio-source.webp"
-          dst = "assets/icon-women-trio-production-960x720.png"
-          im = Image.open(src).convert("RGBA")
-          im = im.resize((960, 720), Image.Resampling.LANCZOS)
-          im.save(dst, "PNG", optimize=True)
-          check = Image.open(dst)
-          assert check.size == (960, 720)
-          assert check.mode == "RGBA"
-          print(dst, check.size, check.mode)
-          PY
-
-      - name: Point WHY WE EXIST to the PNG
+          mkdir -p assets
+          cat .tmp/trio-b64/part*.b64 | tr -d '\n\r' | base64 --decode > assets/icon-women-trio-production-960x720.png
+          echo "7876ba0ad2a3e4f7dadc85a4091c2ed371fcb34d  assets/icon-women-trio-production-960x720.png" | sha1sum -c -
+          file assets/icon-women-trio-production-960x720.png
+      - name: Update only WHY WE EXIST image source
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          p = Path("index.html")
-          s = p.read_text(encoding="utf-8")
-          s = s.replace(
-              'src="/assets/icon-women-trio-hq.webp" loading="eager" decoding="async" width="376" height="282"',
-              'src="/assets/icon-women-trio-production-960x720.png?v=20261016-2" loading="eager" decoding="async" width="960" height="720"'
-          )
-          p.write_text(s, encoding="utf-8")
+          import re
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+          pattern=r'(<div class="why-icon-row"[^>]*><span></span><img )[^>]*(><span></span></div>)'
+          repl=r'\1src="/assets/icon-women-trio-production-960x720.png?v=20261016-4" loading="eager" decoding="async" width="960" height="720" alt=""\2'
+          out,n=re.subn(pattern,repl,s,count=1)
+          if n != 1:
+              raise SystemExit(f"WHY image replacement count {n}, expected 1")
+          p.write_text(out,encoding="utf-8")
           PY
-
-      - name: Commit generated asset
+      - name: Commit PNG and cleanup transfer files
         run: |
+          rm -rf .tmp/trio-b64
+          rm -f .github/workflows/build-why-image.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/icon-women-trio-production-960x720.png index.html
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Add production PNG for WHY WE EXIST"
-            git push origin main
-          fi
-
+          git add -A
+          git commit -m "Install production PNG for WHY WE EXIST"
+          git push origin main
