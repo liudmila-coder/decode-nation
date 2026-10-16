@@ -1,0 +1,60 @@
+name: Build WHY WE EXIST PNG
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/build-why-image.yml"
+      - "assets/icon-women-trio-hq.webp"
+
+permissions:
+  contents: write
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create production PNG
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 - <<'PY'
+          from PIL import Image
+          src = "assets/icon-women-trio-hq.webp"
+          dst = "assets/icon-women-trio-production-960x720.png"
+          im = Image.open(src).convert("RGBA")
+          im = im.resize((960, 720), Image.Resampling.LANCZOS)
+          im.save(dst, "PNG", optimize=True)
+          check = Image.open(dst)
+          assert check.size == (960, 720)
+          assert check.mode == "RGBA"
+          print(dst, check.size, check.mode)
+          PY
+
+      - name: Point WHY WE EXIST to the PNG
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("index.html")
+          s = p.read_text(encoding="utf-8")
+          s = s.replace(
+              'src="/assets/icon-women-trio-hq.webp" loading="eager" decoding="async" width="376" height="282"',
+              'src="/assets/icon-women-trio-production-960x720.png?v=20261016-2" loading="eager" decoding="async" width="960" height="720"'
+          )
+          p.write_text(s, encoding="utf-8")
+          PY
+
+      - name: Commit generated asset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/icon-women-trio-production-960x720.png index.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Add production PNG for WHY WE EXIST"
+            git push origin main
+          fi
