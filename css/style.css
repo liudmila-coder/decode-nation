@@ -1097,3 +1097,46 @@ a:focus,
     font-size:clamp(13px,4vw,18px)!important;
   }
 }
+
+
+/* 2026-10-17 brands copy + video refinements */
+#brands .brands__list{
+  margin:0;
+  padding-left:1.15em;
+}
+#brands .brands__list .t-body{
+  font-family:var(--sans)!important;
+  font-size:var(--fs-body)!important;
+  line-height:1.6!important;
+  font-weight:400!important;
+  color:var(--ink)!important;
+  letter-spacing:0!important;
+}
+#brands .brands__term{
+  color:var(--burgundy);
+  font-weight:400;
+}
+#brands .brands__tail{
+  text-align:center;
+  width:100%;
+}
+#brands .brands__media-frame{
+  width:100%;
+  min-height:0;
+  align-self:start;
+  overflow:hidden;
+}
+#brands .brands__video{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:4/5;
+  object-fit:cover;
+  background:transparent;
+}
+@media(max-width:899.98px){
+  #brands .brands__media-frame{
+    max-width:520px;
+    margin-inline:auto;
+  }
+}
