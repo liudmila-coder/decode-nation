@@ -991,3 +991,42 @@ a:focus,
     height:56px!important;
   }
 }
+
+
+/* 2026-10-16 sponsorship, About and News refinements */
+#brands .brands__headline{
+  max-width:none!important;
+  white-space:nowrap;
+  font-size:clamp(24px,3.2vw,var(--fs-headline));
+}
+
+#brands .brands__content{
+  max-width:900px;
+}
+
+.brands__cta-row{
+  display:flex;
+  justify-content:center;
+  width:100%;
+  margin-top:12px;
+}
+
+.brands__cta-row .card__cta{
+  align-self:auto;
+}
+
+#news .card{
+  --tilt-a:.25deg;
+  --tilt-b:-.2deg;
+}
+
+#news .news__headline{
+  max-width:none;
+}
+
+@media(max-width:767.98px){
+  #brands .brands__headline{
+    white-space:normal;
+    font-size:18px!important;
+  }
+}
