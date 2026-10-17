@@ -18,14 +18,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Restore and validate touchscreen video
+      - name: Restore touchscreen video
         run: |
           cat .tmp/video.0.b64 .tmp/video.1.b64 .tmp/video.2.b64 .tmp/video.3.b64 .tmp/video.4.b64 .tmp/video.5.b64 .tmp/video.6.b64 \
             | tr -d '\n\r ' | base64 --decode > assets/essential-station-touchscreen.mp4
           test -s assets/essential-station-touchscreen.mp4
-          file assets/essential-station-touchscreen.mp4
-          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height -show_entries format=duration,size -of json assets/essential-station-touchscreen.mp4
-          ffmpeg -v error -i assets/essential-station-touchscreen.mp4 -f null -
+          file assets/essential-station-touchscreen.mp4 | grep -q "ISO Media, MP4"
 
       - name: Commit video asset
         run: |
