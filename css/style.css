@@ -970,8 +970,8 @@ a:focus,
 }
 
 .contact__woman-icon{
-  width:clamp(54px,5vw,72px)!important;
-  height:auto!important;
+  width:auto!important;
+  height:clamp(54px,5.5vw,72px)!important;
   object-fit:contain!important;
   background:transparent!important;
   mix-blend-mode:normal!important;
@@ -987,6 +987,7 @@ a:focus,
     white-space:normal!important;
   }
   .contact__woman-icon{
-    width:48px!important;
+    width:auto!important;
+    height:56px!important;
   }
 }
