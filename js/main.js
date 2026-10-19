@@ -226,9 +226,19 @@ var FORM_ENDPOINT = '';
     showPlay();
   });
 
-  video.addEventListener('loadedmetadata', () => {
-    if (video.currentTime === 0) {
-      try { video.currentTime = 0.001; } catch (_) {}
+  const previewTime = 0.5;
+
+  const showPreviewFrame = () => {
+    if (!Number.isFinite(video.duration) || video.duration <= 0) return;
+    const target = Math.min(previewTime, Math.max(0, video.duration - 0.05));
+    if (Math.abs(video.currentTime - target) > 0.05) {
+      try { video.currentTime = target; } catch (_) {}
     }
+  };
+
+  video.addEventListener('loadedmetadata', showPreviewFrame);
+  video.addEventListener('loadeddata', showPreviewFrame);
+  video.addEventListener('canplay', () => {
+    if (video.paused) showPlay();
   });
 })();
