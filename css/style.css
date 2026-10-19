@@ -1476,3 +1476,15 @@ a:focus,
     max-width:360px!important;
   }
 }
+
+
+/* 2026-10-18 center About Us intro copy */
+#about .about__intro,
+#about .about__intro .t-head,
+#about .about__intro .t-body{
+  text-align:center!important;
+}
+#about .about__intro{
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
