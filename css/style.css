@@ -1345,3 +1345,81 @@ a:focus,
   text-transform:uppercase!important;
   color:var(--burgundy)!important;
 }
+
+
+/* 2026-10-18 AMAC networking news note */
+#news .news-article{
+  margin-top:clamp(22px,3vw,36px);
+}
+#news .news-article__header{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  margin-bottom:clamp(24px,3vw,38px);
+}
+#news .news-article__meta{
+  margin:0;
+  font-family:var(--sans);
+  font-size:var(--fs-body);
+  line-height:1.6;
+  font-weight:400;
+  color:var(--burgundy);
+  letter-spacing:0;
+  text-transform:none;
+}
+#news .news-article__layout{
+  display:grid;
+  grid-template-columns:minmax(0,.88fr) minmax(420px,1.12fr);
+  gap:clamp(36px,5vw,72px);
+  align-items:start;
+}
+#news .news-article__body{
+  display:grid;
+  gap:20px;
+}
+#news .news-article__body p{
+  margin:0;
+}
+#news .news-article__body strong{
+  font-weight:600;
+}
+#news .news-article__gallery{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  padding:8px;
+  border:1px solid var(--burgundy);
+  background:rgba(255,255,255,.46);
+}
+#news .news-photo{
+  display:block;
+  width:100%;
+  height:190px;
+  object-fit:cover;
+}
+#news .news-photo--wide{
+  grid-column:1 / -1;
+  height:260px;
+}
+@media(max-width:980px){
+  #news .news-article__layout{
+    grid-template-columns:1fr;
+  }
+  #news .news-article__gallery{
+    max-width:760px;
+    margin-inline:auto;
+  }
+}
+@media(max-width:560px){
+  #news .news-article__gallery{
+    grid-template-columns:1fr 1fr;
+    gap:5px;
+    padding:5px;
+  }
+  #news .news-photo{
+    height:130px;
+  }
+  #news .news-photo--wide{
+    height:200px;
+  }
+}
