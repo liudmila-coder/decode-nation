@@ -1488,3 +1488,19 @@ a:focus,
   margin-left:auto!important;
   margin-right:auto!important;
 }
+
+
+/* 2026-10-18 center all About Us intro content before founder photos */
+#about .card__label,
+#about .about__headline,
+#about .about__headline + .t-body.measure{
+  text-align:center!important;
+}
+#about .about__headline,
+#about .about__headline + .t-body.measure{
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+#about .about__headline + .t-body.measure{
+  max-width:900px!important;
+}
