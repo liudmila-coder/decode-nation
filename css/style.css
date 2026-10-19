@@ -1435,3 +1435,44 @@ a:focus,
 #news .news-photo--wide{
   grid-column:1 / -1;
 }
+
+/* 2026-10-18 About Us portrait/text alignment refinement */
+#about .founders{
+  gap:clamp(36px,5vw,64px)!important;
+}
+#about .founder{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+}
+#about .portrait{
+  width:75%!important;
+  max-width:360px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  margin-bottom:24px!important;
+}
+#about .portrait img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+}
+#about .founder__name,
+#about .founder__role,
+#about .founder .flow{
+  width:75%!important;
+  max-width:360px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:left!important;
+}
+
+@media(max-width:767.98px){
+  #about .portrait,
+  #about .founder__name,
+  #about .founder__role,
+  #about .founder .flow{
+    width:86%!important;
+    max-width:360px!important;
+  }
+}
