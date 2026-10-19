@@ -1435,12 +1435,3 @@ a:focus,
 #news .news-photo--wide{
   grid-column:1 / -1;
 }
-#news .news-article__gallery .news-photo:last-child{
-  grid-column:1 / -1;
-  height:240px;
-}
-@media(max-width:560px){
-  #news .news-article__gallery .news-photo:last-child{
-    height:190px;
-  }
-}
