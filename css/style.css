@@ -1504,3 +1504,101 @@ a:focus,
 #about .about__headline + .t-body.measure{
   max-width:900px!important;
 }
+
+
+/* 2026-10-19 mobile-only overflow and text fitting fixes */
+@media(max-width:639.98px){
+  html,
+  body{
+    max-width:100%;
+    overflow-x:hidden;
+  }
+
+  .page__inner,
+  main,
+  .section,
+  .wrap,
+  .card{
+    box-sizing:border-box;
+    max-width:100%;
+  }
+
+  .hero{
+    box-sizing:border-box;
+    width:100%;
+    max-width:100%;
+    padding-left:18px!important;
+    padding-right:18px!important;
+  }
+
+  .hero__label{
+    width:100%;
+    max-width:100%;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    text-align:center!important;
+    white-space:normal!important;
+  }
+
+  .hero__title{
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    padding:0!important;
+    font-size:clamp(21px,5.55vw,27px)!important;
+    line-height:1.12!important;
+    text-align:center!important;
+    overflow-wrap:normal!important;
+  }
+
+  .hero__line1,
+  .hero__line2,
+  .hero__secondary-line{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    white-space:normal!important;
+  }
+
+  .hero__secondary-line{
+    font-size:.72em!important;
+    line-height:1.28!important;
+  }
+
+  #stations .card__label,
+  #stations .station__subhead,
+  #news .card__label,
+  #news .news__copy,
+  #news .news-article__meta,
+  #news .news-article__body,
+  #news .news-article__body p{
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:break-word!important;
+  }
+
+  #stations .station__subhead{
+    font-size:clamp(16px,4.7vw,19px)!important;
+    line-height:1.35!important;
+  }
+
+  #stations .split,
+  #brands .brands__layout,
+  #news .news-article__layout{
+    min-width:0!important;
+  }
+
+  #stations .split > *,
+  #brands .brands__layout > *,
+  #news .news-article__layout > *{
+    min-width:0!important;
+    max-width:100%!important;
+  }
+
+  #news .news-article__gallery{
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box;
+  }
+}
