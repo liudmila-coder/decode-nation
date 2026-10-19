@@ -1238,3 +1238,92 @@ a:focus,
     height:64px;
   }
 }
+
+
+/* 2026-10-18 heading scale, About portraits, Brands video balance */
+#why .card__label,
+#brands .card__label,
+#next .card__label,
+#about .card__label,
+#contact .card__label,
+#news .card__label{
+  font-size:clamp(17px,1.55vw,20px)!important;
+  letter-spacing:.1em!important;
+}
+
+/* Founder portraits: 50% larger than previous 50% width treatment */
+#about .portrait{
+  width:75%!important;
+  max-width:360px!important;
+  margin-left:0!important;
+  margin-right:auto!important;
+  margin-bottom:24px!important;
+}
+#about .founder{
+  align-items:flex-start!important;
+}
+#about .founder__name,
+#about .founder__role,
+#about .founder .flow{
+  width:100%;
+  text-align:left;
+}
+
+/* Brands: balanced text + reel-sized media, aligned cleanly */
+#brands .brands__layout{
+  grid-template-columns:minmax(0,1.15fr) minmax(280px,.72fr)!important;
+  gap:clamp(40px,5vw,72px)!important;
+  align-items:start!important;
+}
+#brands .brands__content{
+  max-width:650px!important;
+}
+#brands .brands__media-frame{
+  width:100%!important;
+  max-width:380px!important;
+  justify-self:end!important;
+  background:transparent!important;
+}
+#brands .brands__video-shell{
+  aspect-ratio:4 / 5!important;
+  background:#f7f7f5!important;
+}
+#brands .brands__video{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  background:#f7f7f5!important;
+}
+#brands .brands__tail{
+  margin-top:8px!important;
+}
+
+@media(max-width:899.98px){
+  #brands .brands__layout{
+    grid-template-columns:1fr!important;
+  }
+  #brands .brands__content{
+    max-width:none!important;
+  }
+  #brands .brands__media-frame{
+    width:min(78vw,380px)!important;
+    max-width:380px!important;
+    justify-self:center!important;
+    margin-inline:auto!important;
+  }
+}
+
+@media(max-width:767.98px){
+  #why .card__label,
+  #brands .card__label,
+  #next .card__label,
+  #about .card__label,
+  #contact .card__label,
+  #news .card__label{
+    font-size:16px!important;
+  }
+  #about .portrait{
+    width:75%!important;
+    max-width:315px!important;
+  }
+}
