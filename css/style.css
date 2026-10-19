@@ -1327,3 +1327,21 @@ a:focus,
     max-width:315px!important;
   }
 }
+
+
+/* 2026-10-18 section labels match hero eyebrow exactly */
+#stations .card__label,
+#why .card__label,
+#brands .card__label,
+#next .card__label,
+#about .card__label,
+#contact .card__label,
+#news .card__label{
+  font-family:var(--sans)!important;
+  font-size:var(--fs-label)!important;
+  font-weight:500!important;
+  line-height:1.5!important;
+  letter-spacing:.12em!important;
+  text-transform:uppercase!important;
+  color:var(--burgundy)!important;
+}
