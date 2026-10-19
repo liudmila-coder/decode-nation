@@ -1423,3 +1423,24 @@ a:focus,
     height:200px;
   }
 }
+
+
+/* 2026-10-18 AMAC gallery refinement */
+#news .news-article__header{
+  margin-bottom:clamp(22px,2.5vw,32px);
+}
+#news .news-article__gallery{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+#news .news-photo--wide{
+  grid-column:1 / -1;
+}
+#news .news-article__gallery .news-photo:last-child{
+  grid-column:1 / -1;
+  height:240px;
+}
+@media(max-width:560px){
+  #news .news-article__gallery .news-photo:last-child{
+    height:190px;
+  }
+}
