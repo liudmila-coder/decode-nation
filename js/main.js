@@ -196,3 +196,39 @@ var FORM_ENDPOINT = '';
   initReveal();
   initContactForm();
 })();
+
+
+/* 2026-10-18 inline Brands reel playback */
+(() => {
+  const shell = document.querySelector('.brands__video-shell');
+  if (!shell) return;
+
+  const video = shell.querySelector('.brands__video');
+  const play = shell.querySelector('.brands__play');
+  if (!video || !play) return;
+
+  const showPlay = () => play.classList.remove('is-hidden');
+  const hidePlay = () => play.classList.add('is-hidden');
+
+  play.addEventListener('click', () => {
+    video.play();
+  });
+
+  video.addEventListener('click', () => {
+    if (video.paused) video.play();
+    else video.pause();
+  });
+
+  video.addEventListener('play', hidePlay);
+  video.addEventListener('pause', showPlay);
+  video.addEventListener('ended', () => {
+    video.currentTime = 0.001;
+    showPlay();
+  });
+
+  video.addEventListener('loadedmetadata', () => {
+    if (video.currentTime === 0) {
+      try { video.currentTime = 0.001; } catch (_) {}
+    }
+  });
+})();
