@@ -1,0 +1,42 @@
+name: Prepare browser-compatible Brands video
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/remux-brands-video.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  remux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Remux without re-encoding
+        run: |
+          ffmpeg -y -i assets/essential-station-touchscreen.mp4 -map 0:v:0 -c copy -movflags +faststart assets/essential-station-touchscreen-web.mp4
+          echo "ORIGINAL"
+          ffprobe -v error -show_entries stream=codec_name,profile,pix_fmt,width,height,r_frame_rate -show_entries format=duration,size -of json assets/essential-station-touchscreen.mp4
+          echo "WEB"
+          ffprobe -v error -show_entries stream=codec_name,profile,pix_fmt,width,height,r_frame_rate -show_entries format=duration,size -of json assets/essential-station-touchscreen-web.mp4
+          ffmpeg -v error -i assets/essential-station-touchscreen-web.mp4 -f null -
+
+      - name: Commit web-ready video
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/essential-station-touchscreen-web.mp4
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Add browser-compatible Essential Station video"
+            git push origin main
+          fi
