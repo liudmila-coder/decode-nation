@@ -1603,18 +1603,19 @@ a:focus,
   }
 }
 
-/* Desktop: distribute sponsorship copy over the height of the video. */
+/* Desktop: compact sponsorship copy centered beside the video. */
 @media (min-width: 900px) {
   #brands .brands__layout {
-    align-items: stretch !important;
+    align-items: center !important;
   }
   #brands .brands__content {
-    align-self: stretch;
-    gap: 28px;
+    align-self: center;
+    gap: 24px;
   }
   #brands .brands__list {
-    flex: 1;
-    justify-content: space-between;
+    flex: 0 1 auto;
+    justify-content: flex-start;
+    gap: 18px;
   }
   #brands .brands__tail {
     margin-top: 0 !important;
