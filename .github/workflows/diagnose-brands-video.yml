@@ -1,0 +1,82 @@
+name: Diagnose Brands video
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnose-brands-video.yml"
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Inspect video file
+        run: |
+          echo "FILE"
+          file assets/essential-station-touchscreen.mp4
+          echo "FFPROBE"
+          ffprobe -v error -show_entries stream=index,codec_name,codec_long_name,profile,pix_fmt,width,height,r_frame_rate -show_entries format=format_name,duration,size -of json assets/essential-station-touchscreen.mp4
+
+      - name: Check production video response
+        run: |
+          echo "HEAD"
+          curl -sSIL --max-redirs 5 "https://decode-nation.vercel.app/assets/essential-station-touchscreen.mp4?v=20261018-2"
+          echo "RANGE"
+          curl -sS -D - -o /tmp/range.bin -H "Range: bytes=0-1023" "https://decode-nation.vercel.app/assets/essential-station-touchscreen.mp4?v=20261018-2" | head -50
+          wc -c /tmp/range.bin
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium webkit
+
+      - name: Browser diagnosis
+        run: |
+          cat > /tmp/test_video.py <<'PY'
+          from playwright.sync_api import sync_playwright
+          URL="https://decode-nation.vercel.app/#brands"
+          with sync_playwright() as p:
+              for name, engine in [("chromium", p.chromium), ("webkit", p.webkit)]:
+                  browser=engine.launch(headless=True)
+                  page=browser.new_page(viewport={"width":390,"height":844})
+                  errors=[]
+                  page.on("console", lambda m: errors.append("console:"+m.type+":"+m.text) if m.type=="error" else None)
+                  page.on("pageerror", lambda e: errors.append("pageerror:"+str(e)))
+                  page.goto(URL, wait_until="networkidle", timeout=120000)
+                  v=page.locator(".brands__video")
+                  v.scroll_into_view_if_needed()
+                  page.wait_for_timeout(3000)
+                  state=page.evaluate("""() => {
+                    const v=document.querySelector('.brands__video');
+                    const s=v?.querySelector('source');
+                    return {
+                      exists:!!v,
+                      currentSrc:v?.currentSrc,
+                      src:s?.src,
+                      muted:v?.muted,
+                      defaultMuted:v?.defaultMuted,
+                      autoplay:v?.autoplay,
+                      loop:v?.loop,
+                      playsInline:v?.playsInline,
+                      paused:v?.paused,
+                      ended:v?.ended,
+                      readyState:v?.readyState,
+                      networkState:v?.networkState,
+                      currentTime:v?.currentTime,
+                      duration:v?.duration,
+                      videoWidth:v?.videoWidth,
+                      videoHeight:v?.videoHeight,
+                      error:v?.error ? {code:v.error.code,message:v.error.message} : null
+                    }
+                  }""")
+                  print(name.upper(), state)
+                  print(name.upper()+" ERRORS", errors)
+                  browser.close()
+          PY
+          python /tmp/test_video.py
