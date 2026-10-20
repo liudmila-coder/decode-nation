@@ -43,7 +43,7 @@ jobs:
         run: |
           cat > /tmp/test_video.py <<'PY'
           from playwright.sync_api import sync_playwright
-          URL="https://decode-nation.vercel.app/#brands"
+          URL="https://decode-nation.vercel.app/#brands" # production verification
           with sync_playwright() as p:
               for name, engine in [("chromium", p.chromium), ("webkit", p.webkit)]:
                   browser=engine.launch(headless=True)
