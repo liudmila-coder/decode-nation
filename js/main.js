@@ -198,47 +198,47 @@ var FORM_ENDPOINT = '';
 })();
 
 
-/* 2026-10-18 inline Brands reel playback */
+/* 2026-10-19 Brands video autoplay on visibility */
 (() => {
-  const shell = document.querySelector('.brands__video-shell');
-  if (!shell) return;
+  const video = document.querySelector('.brands__video');
+  if (!video) return;
 
-  const video = shell.querySelector('.brands__video');
-  const play = shell.querySelector('.brands__play');
-  if (!video || !play) return;
+  // Required for muted inline autoplay, especially Safari/iOS.
+  video.muted = true;
+  video.defaultMuted = true;
+  video.loop = true;
+  video.playsInline = true;
+  video.setAttribute('muted', '');
+  video.setAttribute('playsinline', '');
+  video.setAttribute('webkit-playsinline', '');
 
-  const showPlay = () => play.classList.remove('is-hidden');
-  const hidePlay = () => play.classList.add('is-hidden');
+  let isVisible = false;
 
-  play.addEventListener('click', () => {
-    video.play();
-  });
-
-  video.addEventListener('click', () => {
-    if (video.paused) video.play();
-    else video.pause();
-  });
-
-  video.addEventListener('play', hidePlay);
-  video.addEventListener('pause', showPlay);
-  video.addEventListener('ended', () => {
-    video.currentTime = 0.001;
-    showPlay();
-  });
-
-  const previewTime = 0.5;
-
-  const showPreviewFrame = () => {
-    if (!Number.isFinite(video.duration) || video.duration <= 0) return;
-    const target = Math.min(previewTime, Math.max(0, video.duration - 0.05));
-    if (Math.abs(video.currentTime - target) > 0.05) {
-      try { video.currentTime = target; } catch (_) {}
+  const playVideo = () => {
+    if (!isVisible || document.hidden) return;
+    const attempt = video.play();
+    if (attempt && typeof attempt.catch === 'function') {
+      attempt.catch(() => {
+        // A later loadeddata/canplay/intersection event will retry.
+      });
     }
   };
 
-  video.addEventListener('loadedmetadata', showPreviewFrame);
-  video.addEventListener('loadeddata', showPreviewFrame);
-  video.addEventListener('canplay', () => {
-    if (video.paused) showPlay();
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      isVisible = entry.isIntersecting && entry.intersectionRatio >= 0.2;
+      if (isVisible) playVideo();
+      else video.pause();
+    }
+  }, { threshold: [0, 0.2, 0.5] });
+
+  observer.observe(video);
+
+  video.addEventListener('loadeddata', playVideo);
+  video.addEventListener('canplay', playVideo);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) video.pause();
+    else playVideo();
   });
 })();
