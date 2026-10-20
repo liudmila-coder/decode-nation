@@ -198,47 +198,77 @@ var FORM_ENDPOINT = '';
 })();
 
 
-/* 2026-10-19 Brands video autoplay on visibility */
-(() => {
-  const video = document.querySelector('.brands__video');
+/* Brands video: muted inline autoplay whenever the media is in view. */
+(function () {
+  var video = document.querySelector('#brands .brands__video');
   if (!video) return;
 
-  // Required for muted inline autoplay, especially Safari/iOS.
   video.muted = true;
   video.defaultMuted = true;
   video.loop = true;
+  video.autoplay = true;
   video.playsInline = true;
   video.setAttribute('muted', '');
+  video.setAttribute('autoplay', '');
+  video.setAttribute('loop', '');
   video.setAttribute('playsinline', '');
   video.setAttribute('webkit-playsinline', '');
 
-  let isVisible = false;
+  var visible = false;
+  var pending = false;
 
-  const playVideo = () => {
-    if (!isVisible || document.hidden) return;
-    const attempt = video.play();
-    if (attempt && typeof attempt.catch === 'function') {
-      attempt.catch(() => {
-        // A later loadeddata/canplay/intersection event will retry.
+  function playWhenVisible() {
+    if (!visible || document.hidden || !video.paused || pending) return;
+    pending = true;
+    var promise;
+    try {
+      promise = video.play();
+    } catch (err) {
+      pending = false;
+      console.warn('[Essential Station video] playback failed', err);
+      return;
+    }
+    if (promise && typeof promise.then === 'function') {
+      promise.then(function () {
+        pending = false;
+      }).catch(function (err) {
+        pending = false;
+        console.warn('[Essential Station video] autoplay unavailable', err);
       });
+    } else {
+      pending = false;
     }
-  };
+  }
 
-  const observer = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      isVisible = entry.isIntersecting && entry.intersectionRatio >= 0.2;
-      if (isVisible) playVideo();
-      else video.pause();
+  function onVisibilityChange() {
+    if (document.hidden || !visible) {
+      video.pause();
+    } else {
+      playWhenVisible();
     }
-  }, { threshold: [0, 0.2, 0.5] });
+  }
 
-  observer.observe(video);
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        visible = entry.isIntersecting;
+        onVisibilityChange();
+      });
+    }, { rootMargin: '0px', threshold: 0.01 });
+    observer.observe(video);
+  } else {
+    visible = true;
+    onVisibilityChange();
+  }
 
-  video.addEventListener('loadeddata', playVideo);
-  video.addEventListener('canplay', playVideo);
-
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) video.pause();
-    else playVideo();
+  ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough', 'stalled'].forEach(function (eventName) {
+    video.addEventListener(eventName, playWhenVisible);
   });
+  video.addEventListener('error', function () {
+    console.error('[Essential Station video] media load/decode error', video.error, video.currentSrc);
+  });
+  document.addEventListener('visibilitychange', onVisibilityChange);
+  window.addEventListener('pageshow', playWhenVisible);
+  window.addEventListener('focus', playWhenVisible);
+  video.load();
 })();
