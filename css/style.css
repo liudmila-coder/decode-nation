@@ -1652,3 +1652,10 @@ a:focus,
     align-self: center;
   }
 }
+
+/* Desktop: center capped section containers on wide screens. */
+@media (min-width: 900px) {
+  .section > .wrap {
+    margin-inline: auto;
+  }
+}
