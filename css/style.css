@@ -1624,3 +1624,31 @@ a:focus,
     align-self: center;
   }
 }
+
+/* Mobile only: center all page copy, labels, and form text. */
+@media (max-width: 899.98px) {
+  #main,
+  #main * {
+    text-align: center !important;
+  }
+  #main .founder__name,
+  #main .founder__role,
+  #main .founder .flow {
+    text-align: center !important;
+  }
+  #main .list {
+    padding-left: 0;
+    list-style-position: inside;
+  }
+  #brands .brands__list {
+    padding-left: 0;
+  }
+  #main .intent__options,
+  #main .site-foot {
+    justify-content: center;
+  }
+  #main .card__cta,
+  #main .btn--submit {
+    align-self: center;
+  }
+}
