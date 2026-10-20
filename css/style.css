@@ -1602,3 +1602,24 @@ a:focus,
     box-sizing:border-box;
   }
 }
+
+/* Desktop: distribute sponsorship copy over the height of the video. */
+@media (min-width: 900px) {
+  #brands .brands__layout {
+    align-items: stretch !important;
+  }
+  #brands .brands__content {
+    align-self: stretch;
+    gap: 28px;
+  }
+  #brands .brands__list {
+    flex: 1;
+    justify-content: space-between;
+  }
+  #brands .brands__tail {
+    margin-top: 0 !important;
+  }
+  #brands .brands__media-frame {
+    align-self: center;
+  }
+}
