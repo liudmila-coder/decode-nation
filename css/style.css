@@ -1659,3 +1659,11 @@ a:focus,
     margin-inline: auto;
   }
 }
+
+/* Match the sponsorship CTA spacing to the hero CTA (44px). */
+#brands .brands__cta-row {
+  margin-top: 44px;
+}
+#brands .brands__cta-row .card__cta {
+  margin-top: 0;
+}
